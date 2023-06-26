@@ -19,7 +19,7 @@ public class UserService {
         Optional<User> optionalUser = repository.findByEmail(user.getEmail());
 
         if(optionalUser.isPresent()) {
-            throw new EmailAlreadyUsedException("Email ja está em uso");
+            throw new EmailAlreadyUsedException();
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));

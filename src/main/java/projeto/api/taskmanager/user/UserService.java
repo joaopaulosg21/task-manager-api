@@ -2,11 +2,16 @@ package projeto.api.taskmanager.user;
 
 import java.util.Optional;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import projeto.api.taskmanager.exception.user.EmailAlreadyUsedException;
+import projeto.api.taskmanager.user.dtos.LoginDTO;
+import projeto.api.taskmanager.user.dtos.UserDTO;
 
 @Service
 @AllArgsConstructor
@@ -14,6 +19,8 @@ public class UserService {
     private final UserRepository repository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final AuthenticationManager authenticationManager;
 
     public UserDTO create(User user) {
         Optional<User> optionalUser = repository.findByEmail(user.getEmail());
@@ -26,5 +33,14 @@ public class UserService {
         User savedUser = repository.save(user);
 
         return new UserDTO(savedUser.getName(), savedUser.getEmail());
+    }
+
+    public Object login(LoginDTO loginDTO) {
+        
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(null, loginDTO,null);
+
+        Authentication authentication = authenticationManager.authenticate(auth);
+
+        return authentication.getPrincipal();
     }
 }

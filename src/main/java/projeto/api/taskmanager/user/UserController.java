@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import projeto.api.taskmanager.user.dtos.LoginDTO;
+import projeto.api.taskmanager.user.dtos.UserDTO;
 
 @RestController
 @RequestMapping("/users")
@@ -19,5 +21,10 @@ public class UserController {
     @PostMapping()
     public ResponseEntity<UserDTO> create(@Valid @RequestBody User user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(user));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@Valid @RequestBody LoginDTO loginDTO) {
+        return ResponseEntity.ok(service.login(loginDTO));
     }
 }

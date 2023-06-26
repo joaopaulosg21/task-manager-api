@@ -12,9 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import projeto.api.taskmanager.exception.user.EmailAlreadyUsedException;
+import projeto.api.taskmanager.user.dtos.UserDTO;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceUnitTests {
@@ -25,11 +27,14 @@ public class UserServiceUnitTests {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private AuthenticationManager authenticationManager;
+
     private UserService userService;
 
     @BeforeEach
     private void setup() {
-        userService = new UserService(userRepository, passwordEncoder);
+        userService = new UserService(userRepository, passwordEncoder,authenticationManager);
     }
 
     @Test

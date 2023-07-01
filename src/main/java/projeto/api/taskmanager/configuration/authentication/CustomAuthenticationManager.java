@@ -13,6 +13,7 @@ import projeto.api.taskmanager.exception.user.LoginException;
 import projeto.api.taskmanager.user.User;
 import projeto.api.taskmanager.user.UserRepository;
 import projeto.api.taskmanager.user.dtos.LoginDTO;
+import projeto.api.taskmanager.user.dtos.UserDTO;
 
 public class CustomAuthenticationManager implements AuthenticationManager{
 
@@ -36,7 +37,9 @@ public class CustomAuthenticationManager implements AuthenticationManager{
             throw new LoginException();
         }
 
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(optionalUser.get(), loginDTO, null);
+        UserDTO userDTO = new UserDTO(optionalUser.get().getId(),optionalUser.get().getName(), optionalUser.get().getEmail());
+
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDTO, loginDTO, null);
 
         return auth;
     }

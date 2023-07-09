@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
+import projeto.api.taskmanager.common.CommonResponse;
 import projeto.api.taskmanager.configuration.authentication.TokenService;
 import projeto.api.taskmanager.exception.user.EmailAlreadyUsedException;
 import projeto.api.taskmanager.user.dtos.LoginDTO;
@@ -25,7 +26,7 @@ public class UserService {
 
     private final TokenService tokenService;
 
-    public UserDTO create(User user) {
+    public CommonResponse<UserDTO> create(User user) {
         Optional<User> optionalUser = repository.findByEmail(user.getEmail());
 
         if(optionalUser.isPresent()) {
@@ -35,15 +36,19 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = repository.save(user);
 
-        return new UserDTO(savedUser.getId(),savedUser.getName(), savedUser.getEmail());
+        UserDTO userDTO = new UserDTO(savedUser.getId(),savedUser.getName(), savedUser.getEmail());
+
+        return new CommonResponse<>("User created successfully",userDTO);
     }
 
-    public Object login(LoginDTO loginDTO) {
+    public CommonResponse<String> login(LoginDTO loginDTO) {
         
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(null, loginDTO,null);
 
         Authentication authentication = authenticationManager.authenticate(auth);
 
-        return tokenService.generate(authentication);
+        String token = tokenService.generate(authentication);
+
+        return new CommonResponse<>("Token",token);
     }
 }

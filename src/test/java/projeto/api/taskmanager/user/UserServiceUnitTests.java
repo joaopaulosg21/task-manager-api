@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import projeto.api.taskmanager.common.CommonResponse;
 import projeto.api.taskmanager.configuration.authentication.TokenService;
 import projeto.api.taskmanager.exception.user.EmailAlreadyUsedException;
 import projeto.api.taskmanager.user.dtos.UserDTO;
@@ -43,14 +44,15 @@ public class UserServiceUnitTests {
 
     @Test
     public void createUserTest() {
-        User user = new User("test","test@email.com","123");
+        User user = new User(1L,"test","test@email.com","123");
 
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenReturn(user);
 
-        UserDTO response = userService.create(user);
+        CommonResponse<UserDTO> response = userService.create(user);
 
-        assertEquals(user.getEmail(),response.email());
+        assertEquals(user.getEmail(),response.object().email());
+        assertEquals("User created successfully",response.message());
     }
 
     @Test

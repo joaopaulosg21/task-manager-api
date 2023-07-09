@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import projeto.api.taskmanager.common.CommonResponse;
 import projeto.api.taskmanager.user.dtos.UserDTO;
 
 @RestController
@@ -19,7 +20,7 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping
-    public ResponseEntity<Task> create(@Valid @RequestBody Task task, @AuthenticationPrincipal UserDTO userDTO) {
+    public ResponseEntity<CommonResponse<Task>> create(@Valid @RequestBody Task task, @AuthenticationPrincipal UserDTO userDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(taskService.create(task, userDTO));
     }
 

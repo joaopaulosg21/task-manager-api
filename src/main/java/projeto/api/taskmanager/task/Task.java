@@ -45,4 +45,10 @@ public class Task {
     @ManyToOne()
     @JsonIgnoreProperties({"password"})
     private User user;
+
+    public Task(String title, String description, LocalDate limit_date) {
+        this.title = title;
+        this.description = description;
+        this.limit_date = limit_date;
+    }
 }

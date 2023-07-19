@@ -46,9 +46,10 @@ public class Task {
     @JsonIgnoreProperties({"password"})
     private User user;
 
-    public Task(String title, String description, LocalDate limit_date) {
+    public Task(String title, String description,LocalDate createdAt, LocalDate limit_date) {
         this.title = title;
         this.description = description;
         this.limit_date = limit_date;
+        this.createdAt = createdAt;
     }
 }

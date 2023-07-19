@@ -11,4 +11,11 @@ public class CommonResponse<T> {
     private String message; 
 
     private T object;
+
+    @Override
+    public String toString() {
+        return "CommonResponse [message=" + message + ", object=" + object + "]";
+    }
+
+    
 }

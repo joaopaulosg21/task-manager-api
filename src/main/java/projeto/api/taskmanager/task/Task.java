@@ -52,4 +52,10 @@ public class Task {
         this.limit_date = limit_date;
         this.createdAt = createdAt;
     }
+
+        public Task(String title, String description,LocalDate limit_date) {
+        this.title = title;
+        this.description = description;
+        this.limit_date = limit_date;
+    }
 }

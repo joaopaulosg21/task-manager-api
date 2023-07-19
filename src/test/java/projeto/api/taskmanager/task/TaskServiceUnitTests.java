@@ -7,6 +7,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -67,5 +69,21 @@ public class TaskServiceUnitTests {
         LimitDateException exception = assertThrows(LimitDateException.class,() -> taskService.create(task,userDTO));
 
         assertEquals("Data limite não pode ser menor que a data de criação",exception.getMessage());
+    }
+
+    @Test
+    public void findAllTasksTest() {
+        UserDTO userDTO = new UserDTO(1L, "test user", "test.user@email.com");
+
+        List<Task> allTasks = new ArrayList<>();
+        Task task = new Task("test","test description",LocalDate.now(),LocalDate.now().minusDays(1));
+        allTasks.add(task);
+
+        when(taskRepository.findAllByUserId(anyLong())).thenReturn(allTasks);
+
+        List<Task> response = taskService.findAll(userDTO);
+
+        assertEquals(task.getTitle(),response.get(0).getTitle());
+        assertEquals(task.getDescription(),response.get(0).getDescription());
     }
 }

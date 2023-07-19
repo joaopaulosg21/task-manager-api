@@ -42,22 +42,35 @@ public class TaskWebTests {
                 .expectBody(new ParameterizedTypeReference<CommonResponse<String>>() {})
                 .returnResult()
                 .getResponseBody();
-
-                
-
     }
 
     @Test
     public void createTaskWebTest() {
         LocalDate limit_date = LocalDate.now().plusDays(1);
         Task task = new Task("Test title","Test description",LocalDate.now(),limit_date);
+        CommonResponse<Task> response = new CommonResponse<Task>("Task created successfully", task);
 
         webClient.post()
                 .uri("/tasks/")
                 .bodyValue(task)
                 .header("Authorization", "Bearer " + token.getObject())
                 .exchange()
-                .expectStatus().isCreated();
-        
+                .expectStatus().isCreated()
+                .expectBody()
+                .toString().equals(response.toString());
+                
+    }
+    
+    @Test
+    public void findAllTasksWebTest() {
+
+        webClient.get()
+                .uri("/tasks/")
+                .header("Authorization", "Bearer " + token.getObject())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$[0].title").isEqualTo("Test title")
+                .jsonPath("$[0].user.email").isEqualTo("test@email.com");
     }
 }

@@ -1,5 +1,7 @@
 package projeto.api.taskmanager.task;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -28,5 +30,10 @@ public class TaskService {
         Task saved = taskRepository.save(task);
 
         return new CommonResponse<>("Task created successfully",saved);
+    }
+
+    public List<Task> findAll(UserDTO userDTO) {
+        System.out.println(userDTO.getId());
+        return taskRepository.findAllByUserId(userDTO.getId());
     }
 }

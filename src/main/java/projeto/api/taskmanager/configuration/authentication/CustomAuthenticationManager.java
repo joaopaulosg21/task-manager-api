@@ -27,13 +27,13 @@ public class CustomAuthenticationManager implements AuthenticationManager{
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         LoginDTO loginDTO = (LoginDTO) authentication.getCredentials();
 
-        Optional<User> optionalUser = repository.findByEmail(loginDTO.email());
+        Optional<User> optionalUser = repository.findByEmail(loginDTO.getEmail());
 
         if(optionalUser.isEmpty()) {
             throw new LoginException();
         }
 
-        if(!passwordEncoder.matches(loginDTO.password(), optionalUser.get().getPassword())) {
+        if(!passwordEncoder.matches(loginDTO.getPassword(), optionalUser.get().getPassword())) {
             throw new LoginException();
         }
 

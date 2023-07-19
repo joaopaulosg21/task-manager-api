@@ -16,7 +16,7 @@ public class TaskService {
     private final UserRepository userRepository;
 
     public CommonResponse<Task> create(Task task, UserDTO userDTO) {
-        User user = userRepository.findById(userDTO.id()).get();
+        User user = userRepository.findById(userDTO.getId()).get();
         task.setUser(user);
         Task saved = taskRepository.save(task);
 

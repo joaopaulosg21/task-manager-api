@@ -35,7 +35,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((request) -> {
-            request.requestMatchers(HttpMethod.POST, "/users/**").permitAll()
+            request.antMatchers(HttpMethod.POST, "/users/**").permitAll()
             .anyRequest().authenticated();
         }).addFilterBefore(new SecurityFilter(tokenService,userRepository), UsernamePasswordAuthenticationFilter.class);
 

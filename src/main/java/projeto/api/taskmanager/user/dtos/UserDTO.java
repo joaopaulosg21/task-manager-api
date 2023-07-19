@@ -1,4 +1,16 @@
 package projeto.api.taskmanager.user.dtos;
 
-public record UserDTO(long id,String name,String email) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+public class UserDTO {
+
+    private long id;
+
+    private String name;
+
+    private String email;
 }

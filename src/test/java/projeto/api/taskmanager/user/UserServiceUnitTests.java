@@ -51,8 +51,8 @@ public class UserServiceUnitTests {
 
         CommonResponse<UserDTO> response = userService.create(user);
 
-        assertEquals(user.getEmail(),response.object().email());
-        assertEquals("User created successfully",response.message());
+        assertEquals(user.getEmail(),response.getObject().getEmail());
+        assertEquals("User created successfully",response.getMessage());
     }
 
     @Test

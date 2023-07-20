@@ -1,7 +1,9 @@
 package projeto.api.taskmanager.task;
 
-import java.util.List;
+import java.time.LocalDate;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -20,7 +22,7 @@ public class TaskService {
     private final UserRepository userRepository;
 
     public CommonResponse<Task> create(Task task, UserDTO userDTO) {
-        
+        task.setCreatedAt(LocalDate.now());
         if(task.getLimit_date().compareTo(task.getCreatedAt()) < 0) {
             throw new LimitDateException();
         }
@@ -33,8 +35,8 @@ public class TaskService {
         return new CommonResponse<>("Task created successfully",saved);
     }
 
-    public List<Task> findAll(UserDTO userDTO) {
-        return taskRepository.findAllByUserId(userDTO.getId());
+    public Page<Task> findAll(UserDTO userDTO, Pageable pageable) {
+        return taskRepository.findAllByUserId(userDTO.getId(),pageable);
     }
 
     public CommonResponse<Task> start(Long taskId, UserDTO userDTO) {

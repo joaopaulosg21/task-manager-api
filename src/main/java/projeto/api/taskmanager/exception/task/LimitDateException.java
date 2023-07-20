@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class LimitDateException extends RuntimeException{
     
     public LimitDateException() {
-        super("Data limite não pode ser menor que a data de criação");
+        super("Data limite não pode ser menor que a data de criação",null,false,false);
     }
 }

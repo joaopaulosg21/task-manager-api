@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,8 +32,8 @@ public class TaskController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Task>> findAll(@AuthenticationPrincipal UserDTO userDTO) {
-        return ResponseEntity.ok(taskService.findAll(userDTO));
+    public ResponseEntity<List<Task>> findAll(@AuthenticationPrincipal UserDTO userDTO, Pageable pageable) {
+        return ResponseEntity.ok(taskService.findAll(userDTO,pageable).getContent());
     }
 
     @PatchMapping("/start/{taskId}")

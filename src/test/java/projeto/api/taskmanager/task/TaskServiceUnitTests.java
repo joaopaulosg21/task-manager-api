@@ -16,6 +16,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import projeto.api.taskmanager.common.CommonResponse;
 import projeto.api.taskmanager.exception.task.LimitDateException;
@@ -79,9 +83,12 @@ public class TaskServiceUnitTests {
         Task task = new Task("test","test description",LocalDate.now(),LocalDate.now().minusDays(1));
         allTasks.add(task);
 
-        when(taskRepository.findAllByUserId(anyLong())).thenReturn(allTasks);
+        Page<Task> page = new PageImpl<>(allTasks);
+        Pageable pageable = PageRequest.of(0,3);
 
-        List<Task> response = taskService.findAll(userDTO);
+        when(taskRepository.findAllByUserId(anyLong(),any(Pageable.class))).thenReturn(page);
+
+        List<Task> response = taskService.findAll(userDTO,pageable).getContent();
 
         assertEquals(task.getTitle(),response.get(0).getTitle());
         assertEquals(task.getDescription(),response.get(0).getDescription());

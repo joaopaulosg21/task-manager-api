@@ -86,4 +86,17 @@ public class TaskServiceUnitTests {
         assertEquals(task.getTitle(),response.get(0).getTitle());
         assertEquals(task.getDescription(),response.get(0).getDescription());
     }
+
+    @Test
+    public void startTaskTest() {
+        User user = new User(1L,"test user","test.user@email.com","123");
+        Task task = new Task(1L,"test","test description",LocalDate.now(),LocalDate.now().minusDays(1),user,Status.CRIADA);
+
+        when(taskRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(task));
+        when(taskRepository.save(any(Task.class))).thenReturn(task);
+
+        CommonResponse<Task> response = taskService.start(task.getId(), UserDTO.toDTO(user));
+
+        assertEquals(Status.INICIADA,response.getObject().getStatus());
+    }
 }

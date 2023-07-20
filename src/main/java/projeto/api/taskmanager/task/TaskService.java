@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import lombok.AllArgsConstructor;
 import projeto.api.taskmanager.common.CommonResponse;
 import projeto.api.taskmanager.exception.task.LimitDateException;
+import projeto.api.taskmanager.exception.task.TaskNotFoundException;
 import projeto.api.taskmanager.user.User;
 import projeto.api.taskmanager.user.UserRepository;
 import projeto.api.taskmanager.user.dtos.UserDTO;
@@ -26,14 +27,24 @@ public class TaskService {
 
         User user = userRepository.findById(userDTO.getId()).get();
         task.setUser(user);
-
+        task.setStatus(Status.CRIADA);
         Task saved = taskRepository.save(task);
 
         return new CommonResponse<>("Task created successfully",saved);
     }
 
     public List<Task> findAll(UserDTO userDTO) {
-        System.out.println(userDTO.getId());
         return taskRepository.findAllByUserId(userDTO.getId());
+    }
+
+    public CommonResponse<Task> start(Long taskId, UserDTO userDTO) {
+        Task task = taskRepository.findByIdAndUserId(taskId, userDTO.getId()).orElseThrow(TaskNotFoundException::new);
+
+        task.setStatus(Status.INICIADA);
+
+        taskRepository.save(task);
+
+        return new CommonResponse<Task>("task started successfully", task);
+
     }
 }

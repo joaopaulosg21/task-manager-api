@@ -44,9 +44,19 @@ public class TaskService {
 
         task.setStatus(Status.INICIADA);
 
-        taskRepository.save(task);
+        Task saved = taskRepository.save(task);
 
-        return new CommonResponse<Task>("task started successfully", task);
+        return new CommonResponse<Task>("task started successfully", saved);
 
     }
+    
+    public CommonResponse<Task> finish(Long taskId, UserDTO userDTO) {
+        Task task = taskRepository.findByIdAndUserId(taskId, userDTO.getId()).orElseThrow(TaskNotFoundException::new);
+        task.setStatus(Status.TERMINADA);
+        
+        Task saved = taskRepository.save(task);
+
+
+        return new CommonResponse<Task>("Task finish successfully", saved);
+  }
 }

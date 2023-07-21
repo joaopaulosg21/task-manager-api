@@ -40,4 +40,9 @@ public class TaskController {
     public ResponseEntity<CommonResponse<Task>> start(@AuthenticationPrincipal UserDTO userDTO, @PathVariable Long taskId) {
         return ResponseEntity.ok(taskService.start(taskId, userDTO));
     }
+
+    @PatchMapping("/finish/{taskId}")
+    public ResponseEntity<CommonResponse<Task>> finish(@AuthenticationPrincipal UserDTO userDTO, @PathVariable Long taskId) {
+        return ResponseEntity.ok(taskService.finish(taskId, userDTO));
+    }
 }

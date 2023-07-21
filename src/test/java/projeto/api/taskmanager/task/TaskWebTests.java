@@ -1,5 +1,7 @@
 package projeto.api.taskmanager.task;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -48,17 +50,18 @@ public class TaskWebTests {
     public void createTaskWebTest() {
         LocalDate limit_date = LocalDate.now().plusDays(1);
         Task task = new Task("Test title","Test description",LocalDate.now(),limit_date);
-        CommonResponse<Task> response = new CommonResponse<Task>("Task created successfully", task);
 
-        webClient.post()
+        CommonResponse<Task> response = webClient.post()
                 .uri("/tasks/")
                 .bodyValue(task)
                 .header("Authorization", "Bearer " + token.getObject())
                 .exchange()
                 .expectStatus().isCreated()
-                .expectBody()
-                .toString().equals(response.toString());
-                
+                .expectBody(new ParameterizedTypeReference<CommonResponse<Task>>() {})
+                .returnResult().getResponseBody();
+        
+        assertEquals("Task created successfully",response.getMessage());
+        assertEquals("Test title",response.getObject().getTitle());
     }
     
     @Test
@@ -72,5 +75,33 @@ public class TaskWebTests {
                 .expectBody()
                 .jsonPath("$[0].title").isEqualTo("Test title")
                 .jsonPath("$[0].user.email").isEqualTo("test@email.com");
+    }
+
+    @Test
+    public void startTaskWebTest() { 
+        
+        CommonResponse<Task> response = webClient.patch()
+                .uri("/tasks/start/1")
+                .header("Authorization", "Bearer " + token.getObject())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<CommonResponse<Task>>() {})
+                .returnResult().getResponseBody();
+        
+        assertEquals("Task started successfully",response.getMessage());
+    }
+
+    @Test
+    public void finishTaskWebTest() { 
+        
+        CommonResponse<Task> response = webClient.patch()
+                .uri("/tasks/finish/1")
+                .header("Authorization", "Bearer " + token.getObject())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<CommonResponse<Task>>() {})
+                .returnResult().getResponseBody();
+        
+        assertEquals("Task finished successfully",response.getMessage());
     }
 }

@@ -46,7 +46,7 @@ public class TaskService {
 
         Task saved = taskRepository.save(task);
 
-        return new CommonResponse<Task>("task started successfully", saved);
+        return new CommonResponse<Task>("Task started successfully", saved);
 
     }
     
@@ -57,6 +57,6 @@ public class TaskService {
         Task saved = taskRepository.save(task);
 
 
-        return new CommonResponse<Task>("Task finish successfully", saved);
+        return new CommonResponse<Task>("Task finished successfully", saved);
   }
 }

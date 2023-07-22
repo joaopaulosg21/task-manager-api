@@ -45,4 +45,9 @@ public class TaskController {
     public ResponseEntity<CommonResponse<Task>> finish(@AuthenticationPrincipal UserDTO userDTO, @PathVariable Long taskId) {
         return ResponseEntity.ok(taskService.finish(taskId, userDTO));
     }
+
+    @GetMapping("/{taskId}")
+    public ResponseEntity<Task> findById(@AuthenticationPrincipal UserDTO userDTO, @PathVariable Long taskId) {
+        return ResponseEntity.ok(taskService.findById(taskId, userDTO));
+    }
 }

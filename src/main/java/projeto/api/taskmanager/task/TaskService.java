@@ -58,5 +58,11 @@ public class TaskService {
 
 
         return new CommonResponse<Task>("Task finished successfully", saved);
-  }
+    }
+
+    public Task findById(Long id, UserDTO userDTO) {
+        Task task = taskRepository.findByIdAndUserId(id, userDTO.getId()).orElseThrow(TaskNotFoundException::new);
+
+        return task;
+    }
 }

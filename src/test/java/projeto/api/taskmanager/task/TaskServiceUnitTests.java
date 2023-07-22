@@ -119,4 +119,16 @@ public class TaskServiceUnitTests {
         
         assertEquals(Status.TERMINADA, response.getObject().getStatus());
     }
+
+    @Test
+    public void findByIdTest() {
+        User user = new User(1L,"test user","test.user@email.com","123");
+        Task task = new Task(1L,"test","test description",LocalDate.now(),LocalDate.now().minusDays(1),user,Status.CRIADA);
+         
+        when(taskRepository.findByIdAndUserId(anyLong(),anyLong())).thenReturn(Optional.of(task));
+        
+        Task response = taskService.findById(task.getId(), UserDTO.toDTO(user));
+
+        assertEquals(task.getTitle(),response.getTitle());
+    }
 }

@@ -104,4 +104,19 @@ public class TaskWebTests {
         
         assertEquals("Task finished successfully",response.getMessage());
     }
+
+    @Test
+    public void findByIdWebTest() {
+
+        Task response = webClient.get()
+                .uri("/tasks/1")
+                .header("Authorization", "Bearer " + token.getObject())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Task.class)
+                .returnResult().getResponseBody();
+        
+        assertEquals("Test title",response.getTitle());
+        assertEquals(1L, response.getId());
+    }
 }

@@ -131,4 +131,22 @@ public class TaskServiceUnitTests {
 
         assertEquals(task.getTitle(),response.getTitle());
     }
+
+    @Test
+    public void findByStatusTest() {
+        User user = new User(1L,"test user","test.user@email.com","123");
+
+        List<Task> allTasks = new ArrayList<>();
+        Task task = new Task(1L,"test","test description",LocalDate.now(),LocalDate.now().minusDays(1),user,Status.CRIADA);
+        allTasks.add(task);
+
+        Page<Task> page = new PageImpl<>(allTasks);
+        Pageable pageable = PageRequest.of(0,3);
+
+        when(taskRepository.findAllByStatusAndUserId(any(Status.class),anyLong(),any(Pageable.class))).thenReturn(page);
+
+        List<Task> response = taskService.findByStatus(Status.CRIADA, UserDTO.toDTO(user), pageable).getContent();
+
+        assertEquals(Status.CRIADA, response.get(0).getStatus());
+    }
 }

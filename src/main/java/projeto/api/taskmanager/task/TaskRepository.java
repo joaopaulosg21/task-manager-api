@@ -12,4 +12,6 @@ public interface TaskRepository extends PagingAndSortingRepository<Task,Long>{
     Page<Task> findAllByUserId(Long userId,Pageable pageable);
 
     Optional<Task> findByIdAndUserId(Long id, Long userId);
+
+    Page<Task> findAllByStatusAndUserId(Status status, Long userId, Pageable pageable);
 }

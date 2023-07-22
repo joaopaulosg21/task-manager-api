@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
@@ -49,5 +50,11 @@ public class TaskController {
     @GetMapping("/{taskId}")
     public ResponseEntity<Task> findById(@AuthenticationPrincipal UserDTO userDTO, @PathVariable Long taskId) {
         return ResponseEntity.ok(taskService.findById(taskId, userDTO));
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<List<Task>> findByStatus(@AuthenticationPrincipal UserDTO userDTO, 
+    @RequestParam(name = "status",required = true) Status status, Pageable pageable) {
+        return ResponseEntity.ok(taskService.findByStatus(status, userDTO,pageable).getContent());
     }
 }

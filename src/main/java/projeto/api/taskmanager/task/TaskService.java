@@ -65,4 +65,8 @@ public class TaskService {
 
         return task;
     }
+
+    public Page<Task> findByStatus(Status status, UserDTO userDTO,Pageable pageable) {
+        return taskRepository.findAllByStatusAndUserId(status, userDTO.getId(),pageable);
+    }
 }

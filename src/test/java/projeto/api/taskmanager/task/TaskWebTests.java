@@ -89,6 +89,7 @@ public class TaskWebTests {
                 .returnResult().getResponseBody();
         
         assertEquals("Task started successfully",response.getMessage());
+        assertEquals(Status.INICIADA,response.getObject().getStatus());
     }
 
     @Test
@@ -103,6 +104,7 @@ public class TaskWebTests {
                 .returnResult().getResponseBody();
         
         assertEquals("Task finished successfully",response.getMessage());
+        assertEquals(Status.TERMINADA,response.getObject().getStatus());
     }
 
     @Test
@@ -118,5 +120,18 @@ public class TaskWebTests {
         
         assertEquals("Test title",response.getTitle());
         assertEquals(1L, response.getId());
+    }
+
+    @Test
+    public void findByStatusWebTest() {
+
+        webClient.get()
+                .uri("/tasks/find?status=CRIADA&page=0&size=5")
+                .header("Authorization", "Bearer " + token.getObject())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$[0].title").isEqualTo("Test title")
+                .jsonPath("$[0].status").isEqualTo(Status.CRIADA.toString());
     }
 }

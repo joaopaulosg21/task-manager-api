@@ -1,7 +1,11 @@
 package projeto.api.taskmanager.task;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.Cache.ValueWrapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,8 @@ public class TaskService {
 
     private final UserRepository userRepository;
 
+    private final CacheManager cacheManager;
+
     public CommonResponse<Task> create(Task task, UserDTO userDTO) {
         task.setCreatedAt(LocalDate.now());
         if(task.getLimit_date().compareTo(task.getCreatedAt()) < 0) {
@@ -31,10 +37,20 @@ public class TaskService {
         task.setUser(user);
         task.setStatus(Status.CRIADA);
         Task saved = taskRepository.save(task);
+        
+        for(int i=0; i < 10;i++) {
+            Optional<ValueWrapper> optionalCache = Optional.ofNullable(cacheManager.getCache("tasks").get("AllTasks_"+userDTO.getId()+"_page="+i+"_size=10"));
+
+            if(optionalCache.isEmpty()) {
+                cacheManager.getCache("tasks").evictIfPresent("AllTasks_"+userDTO.getId()+"_page="+(i-1)+"_size=10");
+                break;
+            }
+        }
 
         return new CommonResponse<>("Task created successfully",saved);
     }
-
+    
+    @Cacheable(value = "tasks",keyGenerator = "customKeyGenerator")
     public Page<Task> findAll(UserDTO userDTO, Pageable pageable) {
         return taskRepository.findAllByUserId(userDTO.getId(),pageable);
     }

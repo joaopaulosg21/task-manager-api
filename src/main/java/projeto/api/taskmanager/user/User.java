@@ -1,5 +1,7 @@
 package projeto.api.taskmanager.user;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -10,7 +12,7 @@ import lombok.Setter;
 @Entity
 @Table(name="users")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class User {
+public class User implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

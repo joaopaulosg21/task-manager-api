@@ -1,5 +1,6 @@
 package projeto.api.taskmanager.task;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -21,7 +22,7 @@ import projeto.api.taskmanager.user.User;
 @Table(name = "tasks")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Task {
+public class Task implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

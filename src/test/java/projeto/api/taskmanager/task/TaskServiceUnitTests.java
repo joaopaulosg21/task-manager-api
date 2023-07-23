@@ -40,7 +40,7 @@ public class TaskServiceUnitTests {
 
     @BeforeEach
     private void setup() {
-        this.taskService = new TaskService(taskRepository, userRepository);
+        this.taskService = new TaskService(taskRepository, userRepository,null);
     }
 
     @Test

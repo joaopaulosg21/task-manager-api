@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -16,6 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.cache.Cache.ValueWrapper;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -36,11 +39,14 @@ public class TaskServiceUnitTests {
     @Mock
     private TaskRepository taskRepository;
 
+    @Mock
+    private CacheManager cacheManager;
+
     private TaskService taskService;
 
     @BeforeEach
     private void setup() {
-        this.taskService = new TaskService(taskRepository, userRepository,null);
+        this.taskService = new TaskService(taskRepository, userRepository,cacheManager);
     }
 
     @Test
@@ -53,9 +59,12 @@ public class TaskServiceUnitTests {
         
         User user = new User(1L,"test user","test.user@email.com","123");
 
+        ValueWrapper value = () -> task;
+
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(taskRepository.save(any(Task.class))).thenReturn(task);
-
+        when(cacheManager.getCache(anyString())).thenReturn(new CacheImpl());
+        
         CommonResponse<Task> response = taskService.create(task, userDTO);
 
         assertEquals("Task created successfully", response.getMessage());

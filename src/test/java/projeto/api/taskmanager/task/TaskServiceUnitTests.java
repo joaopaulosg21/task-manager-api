@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.cache.Cache.ValueWrapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -59,12 +58,10 @@ public class TaskServiceUnitTests {
         
         User user = new User(1L,"test user","test.user@email.com","123");
 
-        ValueWrapper value = () -> task;
-
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(taskRepository.save(any(Task.class))).thenReturn(task);
         when(cacheManager.getCache(anyString())).thenReturn(new CacheImpl());
-        
+
         CommonResponse<Task> response = taskService.create(task, userDTO);
 
         assertEquals("Task created successfully", response.getMessage());

@@ -3,6 +3,7 @@ package projeto.api.taskmanager.task;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -67,14 +68,16 @@ public class TaskWebTests {
     @Test
     public void findAllTasksWebTest() {
 
-        webClient.get()
+        List<Task> items = webClient.get()
                 .uri("/tasks/")
                 .header("Authorization", "Bearer " + token.getObject())
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody()
-                .jsonPath("$[0].title").isEqualTo("Test title")
-                .jsonPath("$[0].user.email").isEqualTo("test@email.com");
+                .expectBody(FindTasksResponse.class)
+                .returnResult().getResponseBody().getItems();
+        
+        assertEquals("Test title",items.get(0).getTitle());
+        assertEquals("test@email.com",items.get(0).getUser().getEmail());        
     }
 
     @Test

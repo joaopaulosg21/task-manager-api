@@ -62,6 +62,7 @@ public class TaskService {
 
         Task saved = taskRepository.save(task);
 
+        cacheManager.getCache("tasks").clear();
         return new CommonResponse<Task>("Task started successfully", saved);
 
     }
@@ -72,7 +73,7 @@ public class TaskService {
         
         Task saved = taskRepository.save(task);
 
-
+        cacheManager.getCache("tasks").clear();
         return new CommonResponse<Task>("Task finished successfully", saved);
     }
 

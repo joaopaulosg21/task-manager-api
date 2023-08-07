@@ -48,7 +48,7 @@ public class SecurityFilter extends OncePerRequestFilter{
     private void authenticate(String token) {
         long id = tokenService.getIdFromToken(token);
         User user = userRepository.findById(id).get();
-        UserDTO userDTO = new UserDTO(user.getId(), user.getName(), user.getEmail());
+        UserDTO userDTO = UserDTO.toDTO(user);
 
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDTO, null, null);
 

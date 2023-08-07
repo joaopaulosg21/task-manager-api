@@ -107,7 +107,7 @@ public class TaskServiceUnitTests {
 
         when(taskRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(task));
         when(taskRepository.save(any(Task.class))).thenReturn(task);
-
+        when(cacheManager.getCache(anyString())).thenReturn(new CacheImpl());
         CommonResponse<Task> response = taskService.start(task.getId(), UserDTO.toDTO(user));
 
         assertEquals(Status.INICIADA,response.getObject().getStatus());
@@ -120,7 +120,7 @@ public class TaskServiceUnitTests {
          
         when(taskRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(task));
         when(taskRepository.save(any(Task.class))).thenReturn(task);
-
+        when(cacheManager.getCache(anyString())).thenReturn(new CacheImpl());
         CommonResponse<Task> response = taskService.finish(task.getId(), UserDTO.toDTO(user));
         
         assertEquals(Status.TERMINADA, response.getObject().getStatus());

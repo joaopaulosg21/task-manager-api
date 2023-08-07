@@ -49,8 +49,7 @@ public class CacheImpl implements Cache{
 
     @Override
     public void clear() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'clear'");
+        System.out.println("cache clear");
     }
     
 }
